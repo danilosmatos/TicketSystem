@@ -142,22 +142,22 @@ pre {
   gap: 12px;
 }
 
-.chamado {
+.ticket {
   border: 1px solid #d1d5db;
   border-radius: 10px;
   background: #f9fafb;
   padding: 14px;
 }
 
-.chamado h3 {
+.ticket h3 {
   margin: 0 0 8px;
 }
 
-.chamado p {
+.ticket p {
   margin: 6px 0;
 }
 
-.chamado small {
+.ticket small {
   color: #4b5563;
 }
 

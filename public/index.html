@@ -68,17 +68,17 @@
         </div>
 
         <div class="card">
-          <h2>Abrir chamado</h2>
-          <p>O chamado será salvo dentro de <code>/tickets/UID_DO_USUARIO</code>.</p>
+          <h2>Abrir Ticket</h2>
+          <p>O ticket será salvo dentro de <code>/tickets/UID_DO_USUARIO</code>.</p>
 
-          <form id="formChamado">
-            <label for="tituloChamado">Título</label>
-            <input id="tituloChamado" type="text" required placeholder="Ex.: Computador não liga" />
+          <form id="formTicket">
+            <label for="tituloTicket">Título</label>
+            <input id="tituloTicket" type="text" required placeholder="Ex.: Computador não liga" />
 
-            <label for="descricaoChamado">Descrição</label>
-            <textarea id="descricaoChamado" required placeholder="Descreva o problema"></textarea>
+            <label for="descricaoTicket">Descrição</label>
+            <textarea id="descricaoTicket" required placeholder="Descreva o problema"></textarea>
 
-            <button type="submit">Criar ticket</button>
+            <button type="submit">Criar Ticket</button>
           </form>
         </div>
       </div>
@@ -87,14 +87,14 @@
         <div class="card">
           <h2>Meus Tickets</h2>
           <p>Usuário comum e admin podem ver seus próprios tickets.</p>
-          <div id="meusChamados" class="lista"></div>
+          <div id="meusTickets" class="lista"></div>
         </div>
 
         <div class="card">
           <h2>Todos os Tickets</h2>
           <p>Esta área tenta ler <code>/tickets</code>. Somente para admins.</p>
-          <div id="statusTodosChamados" class="status">Aguardando login.</div>
-          <div id="todosChamados" class="lista"></div>
+          <div id="statusTodosTickets" class="status">Aguardando login.</div>
+          <div id="todosTickets" class="lista"></div>
         </div>
       </div>
 

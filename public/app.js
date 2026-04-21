@@ -42,14 +42,14 @@ const cargoUsuario = pegar("cargoUsuario");
 
 const formCadastro = pegar("formCadastro");
 const formLogin = pegar("formLogin");
-const formChamado = pegar("formChamado");
+const formTicket = pegar("formTicket");
 const formAdminData = pegar("formAdminData");
 const btnSair = pegar("btnSair");
 
 const perfilUsuario = pegar("perfilUsuario");
-const meusChamados = pegar("meusChamados");
-const todosChamados = pegar("todosChamados");
-const statusTodosChamados = pegar("statusTodosChamados");
+const meusTickets = pegar("meusTickets");
+const todosTickets = pegar("todosTickets");
+const statusTodosTickets = pegar("statusTodosTickets");
 const statusAdminData = pegar("statusAdminData");
 const adminDataView = pegar("adminDataView");
 const logSistema = pegar("logSistema");
@@ -84,18 +84,18 @@ function traduzirStatus(status) {
   return mapa[status] || status;
 }
 
-function criarCardChamado(chamado, idChamado, uidDono, mostrarAcoesAdmin) {
+function criarCardTicket(ticket, idTicket, uidDono, mostrarAcoesAdmin) {
   const div = document.createElement("div");
-  div.className = "chamado";
+  div.className = "ticket";
 
   div.innerHTML = `
-    <h3>${chamado.title}</h3>
-    <p><strong>Descrição:</strong> ${chamado.description}</p>
-    <p><strong>Status:</strong> ${traduzirStatus(chamado.status)}</p>
-    <p><strong>Dono:</strong> ${chamado.ownerEmail || uidDono}</p>
+    <h3>${ticket.title}</h3>
+    <p><strong>Descrição:</strong> ${ticket.description}</p>
+    <p><strong>Status:</strong> ${traduzirStatus(ticket.status)}</p>
+    <p><strong>Dono:</strong> ${ticket.ownerEmail || uidDono}</p>
     <small>
-      Criado em: ${formatarData(chamado.createdAt)}<br>
-      Atualizado em: ${formatarData(chamado.updatedAt)}
+      Criado em: ${formatarData(ticket.createdAt)}<br>
+      Atualizado em: ${formatarData(ticket.updatedAt)}
     </small>
   `;
 
@@ -104,13 +104,13 @@ function criarCardChamado(chamado, idChamado, uidDono, mostrarAcoesAdmin) {
     acoes.className = "acoes";
 
     acoes.innerHTML = `
-      <button type="button" data-uid="${uidDono}" data-ticket="${idChamado}" data-status="open">
+      <button type="button" data-uid="${uidDono}" data-ticket="${idTicket}" data-status="open">
         Aberto
       </button>
-      <button type="button" data-uid="${uidDono}" data-ticket="${idChamado}" data-status="in_progress">
+      <button type="button" data-uid="${uidDono}" data-ticket="${idTicket}" data-status="in_progress">
         Em andamento
       </button>
-      <button type="button" data-uid="${uidDono}" data-ticket="${idChamado}" data-status="closed">
+      <button type="button" data-uid="${uidDono}" data-ticket="${idTicket}" data-status="closed">
         Fechado
       </button>
     `;
@@ -190,7 +190,7 @@ btnSair.addEventListener("click", async () => {
   }
 });
 
-formChamado.addEventListener("submit", async (evento) => {
+formTicket.addEventListener("submit", async (evento) => {
   evento.preventDefault();
 
   if (!auth.currentUser) {
@@ -198,13 +198,13 @@ formChamado.addEventListener("submit", async (evento) => {
     return;
   }
 
-  const titulo = pegar("tituloChamado").value.trim();
-  const descricao = pegar("descricaoChamado").value.trim();
+  const titulo = pegar("tituloTicket").value.trim();
+  const descricao = pegar("descricaoTicket").value.trim();
 
   const uid = auth.currentUser.uid;
   const agora = Date.now();
 
-  const chamado = {
+  const ticket = {
     title: titulo,
     description: descricao,
     status: "open",
@@ -215,15 +215,15 @@ formChamado.addEventListener("submit", async (evento) => {
   };
 
   try {
-    const novoChamadoRef = push(ref(db, `tickets/${uid}`));
+    const novoTicketRef = push(ref(db, `tickets/${uid}`));
 
-    await set(novoChamadoRef, chamado);
+    await set(novoTicketRef, ticket);
 
-    formChamado.reset();
-    registrarLog(`Chamado criado em /tickets/${uid}/${novoChamadoRef.key}`);
+    formTicket.reset();
+    registrarLog(`Ticket criado em /tickets/${uid}/${novoTicketRef.key}`);
   } catch (erro) {
-    registrarLog(`Erro ao criar chamado: ${erro.message}`);
-    alert(`Erro ao criar chamado: ${erro.message}`);
+    registrarLog(`Erro ao criar ticket: ${erro.message}`);
+    alert(`Erro ao criar ticket: ${erro.message}`);
   }
 });
 
@@ -251,7 +251,7 @@ formAdminData.addEventListener("submit", async (evento) => {
   }
 });
 
-todosChamados.addEventListener("click", async (evento) => {
+todosTickets.addEventListener("click", async (evento) => {
   const botao = evento.target.closest("button[data-status]");
 
   if (!botao) {
@@ -259,50 +259,50 @@ todosChamados.addEventListener("click", async (evento) => {
   }
 
   const uidDono = botao.dataset.uid;
-  const idChamado = botao.dataset.ticket;
+  const idTicket = botao.dataset.ticket;
   const novoStatus = botao.dataset.status;
 
   try {
-    await update(ref(db, `tickets/${uidDono}/${idChamado}`), {
+    await update(ref(db, `tickets/${uidDono}/${idTicket}`), {
       status: novoStatus,
       updatedAt: Date.now()
     });
 
-    registrarLog(`Status alterado em /tickets/${uidDono}/${idChamado}: ${novoStatus}`);
+    registrarLog(`Status alterado em /tickets/${uidDono}/${idTicket}: ${novoStatus}`);
   } catch (erro) {
     registrarLog(`Erro ao alterar status: ${erro.message}`);
     alert(`Erro ao alterar status: ${erro.message}`);
   }
 });
 
-function mostrarMeusChamados(snapshot, uid) {
-  meusChamados.innerHTML = "";
+function mostrarMeusTickets(snapshot, uid) {
+  meusTickets.innerHTML = "";
 
   if (!snapshot.exists()) {
-    meusChamados.innerHTML = "<p>Nenhum chamado próprio encontrado.</p>";
+    meusTickets.innerHTML = "<p>Nenhum ticket próprio encontrado.</p>";
     return;
   }
 
   const dados = snapshot.val();
 
-  Object.entries(dados).forEach(([idChamado, chamado]) => {
-    meusChamados.appendChild(criarCardChamado(chamado, idChamado, uid, false));
+  Object.entries(dados).forEach(([idTicket, ticket]) => {
+    meusTickets.appendChild(criarCardTicket(ticket, idTicket, uid, false));
   });
 }
 
-function mostrarTodosChamados(snapshot) {
-  todosChamados.innerHTML = "";
+function mostrarTodosTickets(snapshot) {
+  todosTickets.innerHTML = "";
 
   if (!snapshot.exists()) {
-    todosChamados.innerHTML = "<p>Nenhum chamado encontrado.</p>";
+    todosTickets.innerHTML = "<p>Nenhum ticket encontrado.</p>";
     return;
   }
 
   const dados = snapshot.val();
 
-  Object.entries(dados).forEach(([uidDono, chamadosDoUsuario]) => {
-    Object.entries(chamadosDoUsuario).forEach(([idChamado, chamado]) => {
-      todosChamados.appendChild(criarCardChamado(chamado, idChamado, uidDono, true));
+  Object.entries(dados).forEach(([uidDono, ticketsDoUsuario]) => {
+    Object.entries(ticketsDoUsuario).forEach(([idTicket, ticket]) => {
+      todosTickets.appendChild(criarCardTicket(ticket, idTicket, uidDono, true));
     });
   });
 }
@@ -319,39 +319,39 @@ function iniciarLeituras(user, perfil) {
     2
   );
 
-  const cancelarMeusChamados = onValue(
+  const cancelarMeusTickets = onValue(
     ref(db, `tickets/${user.uid}`),
     (snapshot) => {
-      mostrarMeusChamados(snapshot, user.uid);
-      registrarLog("Leitura permitida: próprios chamados.");
+      mostrarMeusTickets(snapshot, user.uid);
+      registrarLog("Leitura permitida: próprios tickets.");
     },
     (erro) => {
-      meusChamados.innerHTML = "<p>Erro ao ler próprios chamados.</p>";
+      meusTickets.innerHTML = "<p>Erro ao ler próprios tickets.</p>";
       registrarLog(`Erro em /tickets/${user.uid}: ${erro.message}`);
     }
   );
 
-  canceladores.push(cancelarMeusChamados);
+  canceladores.push(cancelarMeusTickets);
 
-  const cancelarTodosChamados = onValue(
+  const cancelarTodosTickets = onValue(
     ref(db, "tickets"),
     (snapshot) => {
-      statusTodosChamados.textContent = "Acesso permitido: /tickets";
-      statusTodosChamados.className = "status permitido";
+      statusTodosTickets.textContent = "Acesso permitido: /tickets";
+      statusTodosTickets.className = "status permitido";
 
-      mostrarTodosChamados(snapshot);
+      mostrarTodosTickets(snapshot);
       registrarLog("Leitura permitida: /tickets inteiro.");
     },
     (erro) => {
-      statusTodosChamados.textContent = "Acesso negado: somente admin pode ler /tickets inteiro.";
-      statusTodosChamados.className = "status negado";
-      todosChamados.innerHTML = "";
+      statusTodosTickets.textContent = "Acesso negado: somente admin pode ler /tickets inteiro.";
+      statusTodosTickets.className = "status negado";
+      todosTickets.innerHTML = "";
 
       registrarLog(`Acesso negado em /tickets: ${erro.message}`);
     }
   );
 
-  canceladores.push(cancelarTodosChamados);
+  canceladores.push(cancelarTodosTickets);
 
   const cancelarAdminData = onValue(
     ref(db, "admin-data"),
@@ -383,11 +383,11 @@ onAuthStateChanged(auth, async (user) => {
     sessao.classList.add("escondido");
 
     perfilUsuario.textContent = "Nenhum usuário logado.";
-    meusChamados.innerHTML = "";
-    todosChamados.innerHTML = "";
+    meusTickets.innerHTML = "";
+    todosTickets.innerHTML = "";
     adminDataView.textContent = "";
-    statusTodosChamados.textContent = "Aguardando login.";
-    statusTodosChamados.className = "status";
+    statusTodosTickets.textContent = "Aguardando login.";
+    statusTodosTickets.className = "status";
     statusAdminData.textContent = "Aguardando login.";
     statusAdminData.className = "status";
 
