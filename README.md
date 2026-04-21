@@ -6,9 +6,11 @@ Professor:
 [Marcos Vinícius Silva Bento](https://github.com/marcmec)
 
 Alunos:
-[Danilo Soares Matos](https://github.com/danilosmatos)
+[Danilo Soares Matos](https://github.com/danilosmatos), [Ian Oliveira](https://github.com/ianMonteiro07).
 
 ## Objetivo
+
+Sistema de Tickets de suporte simples para demonstrar diferentes níveis de acesso pelo firebase.
 
 A aplicação possui dois tipos de usuário:
 
@@ -20,6 +22,8 @@ Cada cargo possui permissões diferentes no banco de dados. O controle de acesso
 O Usuário é capaz de criar conta, logar, criar ticket. 
 
 Já o Admin consegue ver todos os tickets (o usuário só consegue ver o próprio), alterar o estado deles (aberto, andamento e fechado) acessar o admin-data (banco).
+
+Os prints requeridos estão na pasta Prints do repositorio.
 
 ## Estrutura do banco
 
