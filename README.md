@@ -7,6 +7,7 @@ Professor:
 
 Alunos:
 [Danilo Soares Matos](https://github.com/danilosmatos)
+[Ian Monteiro](https://github.com/ianMonteiro07)
 
 ## Objetivo
 
