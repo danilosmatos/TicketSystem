@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema de Tickets - Firebase</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topo">
+    <div>
+      <h1>Sistema de Tickets</h1>
+      <p>Feito por Danilo e Ian</p>
+    </div>
+
+    <div id="sessao" class="sessao escondido">
+      <span id="usuarioLogado"></span>
+      <span id="cargoUsuario" class="cargo"></span>
+      <button id="btnSair" type="button">Sair</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="areaAuth" class="grid duas-colunas">
+      <div class="card">
+        <h2>Criar conta</h2>
+        <p>
+          O cadastro público cria sempre uma conta com cargo user.
+          O cargo admin será definido manualmente no Firebase Console.
+        </p>
+
+        <form id="formCadastro">
+          <label for="cadastroNome">Nome</label>
+          <input id="cadastroNome" type="text" required placeholder="Ex.: Danilo" />
+
+          <label for="cadastroEmail">E-mail</label>
+          <input id="cadastroEmail" type="email" required placeholder="usuario@email.com" />
+
+          <label for="cadastroSenha">Senha</label>
+          <input id="cadastroSenha" type="password" required minlength="6" placeholder="Mínimo 6 caracteres" />
+
+          <button type="submit">Cadastrar</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Login</h2>
+        <p>Entre com uma conta comum ou com uma conta promovida para admin.</p>
+
+        <form id="formLogin">
+          <label for="loginEmail">E-mail</label>
+          <input id="loginEmail" type="email" required placeholder="usuario@email.com" />
+
+          <label for="loginSenha">Senha</label>
+          <input id="loginSenha" type="password" required placeholder="SenhaSenha" />
+
+          <button type="submit">Entrar</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="areaSistema" class="escondido">
+      <div class="grid duas-colunas">
+        <div class="card">
+          <h2>Meu perfil</h2>
+          <p>Todo usuário autenticado pode acessar o próprio perfil.</p>
+          <pre id="perfilUsuario">Nenhum usuário logado.</pre>
+        </div>
+
+        <div class="card">
+          <h2>Abrir chamado</h2>
+          <p>O chamado será salvo dentro de <code>/tickets/UID_DO_USUARIO</code>.</p>
+
+          <form id="formChamado">
+            <label for="tituloChamado">Título</label>
+            <input id="tituloChamado" type="text" required placeholder="Ex.: Computador não liga" />
+
+            <label for="descricaoChamado">Descrição</label>
+            <textarea id="descricaoChamado" required placeholder="Descreva o problema"></textarea>
+
+            <button type="submit">Criar ticket</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="grid duas-colunas">
+        <div class="card">
+          <h2>Meus Tickets</h2>
+          <p>Usuário comum e admin podem ver seus próprios tickets.</p>
+          <div id="meusChamados" class="lista"></div>
+        </div>
+
+        <div class="card">
+          <h2>Todos os Tickets</h2>
+          <p>Esta área tenta ler <code>/tickets</code>. Somente para admins.</p>
+          <div id="statusTodosChamados" class="status">Aguardando login.</div>
+          <div id="todosChamados" class="lista"></div>
+        </div>
+      </div>
+
+      <div class="grid duas-colunas">
+        <div class="card">
+          <h2>Admin Data</h2>
+          <p>Esta área tenta ler <code>/admin-data</code>. Somente para admins.</p>
+          <div id="statusAdminData" class="status">Aguardando login.</div>
+          <pre id="adminDataView"></pre>
+        </div>
+
+        <div class="card">
+          <h2>Editar Admin Data</h2>
+          <p>Somente para admins.</p>
+
+          <form id="formAdminData">
+            <label for="textoAdminData">Mensagem administrativa</label>
+            <textarea id="textoAdminData" placeholder="Mensagem restrita para administradores"></textarea>
+
+            <button type="submit">Salvar em /admin-data</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Log de permissões</h2>
+      <p>Use este painel na apresentação para mostrar acessos permitidos e negados.</p>
+      <div id="logSistema" class="log"></div>
+    </section>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
